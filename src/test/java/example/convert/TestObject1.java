@@ -37,6 +37,7 @@ public class TestObject1 {
 
         RootElement root = new RootElement();
         root.setObjectElement(oe);
+        root.setPropType(DataType.ARRAY);
 
         try {
             System.out.println(JsonConvert.convertToString(json, root));

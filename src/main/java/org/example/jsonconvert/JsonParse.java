@@ -24,10 +24,20 @@ import java.util.Optional;
  */
 public class JsonParse {
 
+    /**
+     * 解析json串结构
+     * @param json
+     * @return
+     */
     public static RootElement parse(String json) {
         return parse(json, null);
     }
 
+    /**
+     * 解析json对象结构
+     * @param jsonElement
+     * @return
+     */
     public static RootElement parse(JsonElement jsonElement) {
         RootElement rootElement = new RootElement();
         rootElement.setPropType(getDataType(jsonElement));
@@ -41,6 +51,18 @@ public class JsonParse {
         return rootElement;
     }
 
+    /**
+     * 解析json串结构
+     * 从data属性开始
+     * 例如
+     * {
+     *     code:0,
+     *     data:{
+     *     }
+     * }
+     * @param json
+     * @return
+     */
     public static RootElement parse(String json, String dataPropName) {
         JsonElement jsonElement;
         try {
@@ -66,6 +88,11 @@ public class JsonParse {
         return rootElement;
     }
 
+    /**
+     * 解析对象
+     * @param jsonElement
+     * @return
+     */
     private static ObjectElement parseObject(JsonElement jsonElement) {
         if (jsonElement.isJsonNull()) {
             return null;
@@ -92,6 +119,11 @@ public class JsonParse {
         return objectElement;
     }
 
+    /**
+     * 解析数组
+     * @param jsonElement
+     * @return
+     */
     private static ArrayElement parseArray(JsonElement jsonElement) {
         if (jsonElement.isJsonNull()) {
             return null;
@@ -108,6 +140,11 @@ public class JsonParse {
         return arrayElement;
     }
 
+    /**
+     * 获取类型
+     * @param jsonElement
+     * @return
+     */
     private static DataType getDataType(JsonElement jsonElement) {
         if (jsonElement.isJsonArray()) {
             return DataType.ARRAY;
@@ -119,8 +156,6 @@ public class JsonParse {
                 return DataType.BIGDECIMAL;
             } else if (jsonPrimitive.isBoolean()) {
                 return DataType.BOOLEAN;
-            } else if (jsonPrimitive.isNumber()) {
-                return DataType.BIGDECIMAL;
             } else {
                 return DataType.STRING;
             }

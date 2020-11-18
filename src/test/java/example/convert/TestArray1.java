@@ -34,7 +34,7 @@ public class TestArray1 {
         oe.setElements(Lists.newArrayList(element, element2));
 
         ArrayElement arrayElement = new ArrayElement();
-        arrayElement.setPropType(DataType.OBJECT);
+        arrayElement.setPropType(DataType.ARRAY);
         arrayElement.setObjectElement(oe);
 
         ArrayElement arrayElement2 = new ArrayElement();
@@ -43,6 +43,7 @@ public class TestArray1 {
 
         RootElement root = new RootElement();
         root.setArrayElement(arrayElement2);
+        root.setPropType(DataType.ARRAY);
 
         try {
             System.out.println(JsonConvert.convertToString(json, root));

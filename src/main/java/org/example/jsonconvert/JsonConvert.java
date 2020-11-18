@@ -6,9 +6,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import org.example.jsonconvert.enums.DataType;
 import org.example.jsonconvert.exception.JsonConvertException;
 import org.example.jsonconvert.model.ArrayElement;
+import org.example.jsonconvert.model.BaseElement;
 import org.example.jsonconvert.model.Element;
 import org.example.jsonconvert.model.ObjectElement;
 import org.example.jsonconvert.model.RootElement;
@@ -61,12 +63,51 @@ public class JsonConvert {
                 resultElement = convertObject(jsonElement.getAsJsonObject(), rootElement.getObjectElement());
                 break;
             case ARRAY:
-                resultElement = convertArray(jsonElement.getAsJsonArray(), rootElement.getArrayElement());
+                //支持Object转Array
+                resultElement = convertArray(toJsonArray(jsonElement), toArrayElement(jsonElement, rootElement).getArrayElement());
                 break;
             default:
                 throw new JsonConvertException("error root element");
         }
         return resultElement;
+    }
+
+    private static JsonArray toJsonArray(JsonElement jsonElement) {
+        JsonArray jsonArray = new JsonArray();
+        if (jsonElement.isJsonArray()) {
+            jsonArray = jsonElement.getAsJsonArray();
+        } else {
+            jsonArray.add(jsonElement);
+        }
+        return jsonArray;
+    }
+
+    private static ArrayElement toArrayElement(JsonElement jsonElement, BaseElement baseElement) {
+        ArrayElement arrayElement = new ArrayElement();
+        if (baseElement == null) {
+            arrayElement.setPropType(DataType.ARRAY);
+        } else {
+            arrayElement.setPropType(baseElement.getPropType());
+            arrayElement.setObjectElement(baseElement.getObjectElement());
+            arrayElement.setArrayElement(baseElement.getArrayElement());
+        }
+        ArrayElement newArrayElement = new ArrayElement();
+        if (jsonElement.isJsonObject()) {
+            newArrayElement.setObjectElement(arrayElement.getObjectElement());
+            newArrayElement.setPropType(DataType.OBJECT);
+            arrayElement.setArrayElement(newArrayElement);
+        } else if (jsonElement.isJsonPrimitive()) {
+            JsonPrimitive jsonPrimitive = jsonElement.getAsJsonPrimitive();
+            if (jsonPrimitive.isNumber()) {
+                newArrayElement.setPropType(DataType.BIGDECIMAL);
+            } else if (jsonPrimitive.isBoolean()) {
+                newArrayElement.setPropType(DataType.BOOLEAN);
+            } else {
+                newArrayElement.setPropType(DataType.STRING);
+            }
+            arrayElement.setArrayElement(newArrayElement);
+        }
+        return arrayElement;
     }
 
     /**
@@ -109,7 +150,8 @@ public class JsonConvert {
                     array.add(jsonObject);
                     break;
                 case ARRAY:
-                    JsonArray array1 = convertArray(jsonElement.getAsJsonArray(), arrayElement.getArrayElement());
+                    //支持Object转Array
+                    JsonArray array1 = convertArray(toJsonArray(jsonElement), toArrayElement(jsonElement, arrayElement).getArrayElement());
                     array.add(array1);
                     break;
                 default :
