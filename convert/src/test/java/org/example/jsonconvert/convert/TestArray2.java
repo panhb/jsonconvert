@@ -1,4 +1,4 @@
-package example.convert;
+package org.example.jsonconvert.convert;
 
 import org.example.jsonconvert.JsonConvert;
 import org.example.jsonconvert.enums.DataType;

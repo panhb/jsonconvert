@@ -37,5 +37,11 @@ public class Element extends BaseElement {
      */
     private String regularVerify;
 
+    /**
+     * 在源属性不存在且有目标属性时，使用默认值
+     * 默认值优先级高于非空校验和正则校验
+     */
+    private String defaultValue;
+
 
 }

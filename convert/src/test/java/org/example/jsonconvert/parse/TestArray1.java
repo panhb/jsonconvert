@@ -1,4 +1,4 @@
-package example.parse;
+package org.example.jsonconvert.parse;
 
 import org.example.jsonconvert.JsonConvert;
 import org.example.jsonconvert.JsonParse;

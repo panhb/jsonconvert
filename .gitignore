@@ -97,5 +97,13 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
-/jsonconvert.iml
+/org.example.org.example.jsonconvert.iml
 .idea/
+/clog/target/
+/clog/clog.iml
+/convert/target/
+/convert/convert.iml
+/jsonconvert.iml
+/web/.mvn/wrapper/
+/web/mvnw
+/web/mvnw.cmd

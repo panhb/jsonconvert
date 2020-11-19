@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  */
 public class JsonConvert {
 
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     /**
      * 转换成目标json
@@ -72,6 +72,11 @@ public class JsonConvert {
         return resultElement;
     }
 
+    /**
+     * 支持object转array
+     * @param jsonElement
+     * @return
+     */
     private static JsonArray toJsonArray(JsonElement jsonElement) {
         JsonArray jsonArray = new JsonArray();
         if (jsonElement.isJsonArray()) {
@@ -82,6 +87,12 @@ public class JsonConvert {
         return jsonArray;
     }
 
+    /**
+     * 支持object转array
+     * @param jsonElement
+     * @param baseElement
+     * @return
+     */
     private static ArrayElement toArrayElement(JsonElement jsonElement, BaseElement baseElement) {
         ArrayElement arrayElement = new ArrayElement();
         if (baseElement == null) {
@@ -232,18 +243,28 @@ public class JsonConvert {
      * @return
      */
     private static JsonElement getValue(Element element, JsonObject jsonObject) {
-        JsonElement dataElement = jsonObject.get(element.getPropName());
-        if (Objects.nonNull(element.getNullVerify()) && element.getNullVerify()) {
+        JsonElement dataElement;
+        if (jsonObject.has(element.getPropName())) {
+            dataElement = jsonObject.get(element.getPropName());
             checkNull(element, dataElement);
-        } else if (Objects.isNull(dataElement)){
-            return null;
-        }
-        if (!Strings.isNullOrEmpty(element.getRegularVerify())) {
-            checkDataType(element, DataType.STRING);
-            checkReg(element, dataElement);
+            if (Objects.isNull(dataElement)) {
+                return null;
+            }
+            if (!Strings.isNullOrEmpty(element.getRegularVerify())) {
+                checkDataType(element, DataType.STRING);
+                checkReg(element, dataElement);
+            }
+        } else {
+            if (Strings.isNullOrEmpty(element.getDefaultValue())) {
+                checkNull(element, null);
+                return null;
+            } else {
+                //不包含源属性且有默认值
+                dataElement = new JsonPrimitive(element.getDefaultValue());
+            }
         }
         JsonElement jsonElement;
-        switch (element.getPropType()){
+        switch (element.getPropType()) {
             case OBJECT:
                 jsonElement = convertObject(dataElement.getAsJsonObject(), element.getObjectElement());
                 break;
@@ -276,10 +297,12 @@ public class JsonConvert {
      * @param jsonElement
      */
     private static void checkNull(Element element, JsonElement jsonElement) {
-        StringBuilder errMsg = new StringBuilder(element.getPropName());
-        if (Objects.isNull(jsonElement) || jsonElement.isJsonNull()) {
-            errMsg.append(" is null");
-            throw new JsonConvertException(errMsg.toString());
+        if (Objects.nonNull(element.getNullVerify()) && element.getNullVerify()) {
+            StringBuilder errMsg = new StringBuilder(element.getPropName());
+            if (Objects.isNull(jsonElement) || jsonElement.isJsonNull()) {
+                errMsg.append(" is null");
+                throw new JsonConvertException(errMsg.toString());
+            }
         }
     }
 
