@@ -16,6 +16,11 @@ import javax.persistence.Entity;
 public class PropMappingPO extends BasePO {
 
     /**
+     * 源属性所属对象id
+     */
+    private Long objectId;
+
+    /**
      * 源属性
      */
     private Long srcPropId;

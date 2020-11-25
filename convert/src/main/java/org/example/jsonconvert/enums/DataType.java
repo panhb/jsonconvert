@@ -1,5 +1,9 @@
 package org.example.jsonconvert.enums;
 
+import com.google.common.collect.Maps;
+
+import java.util.Map;
+
 /**
  * @author hongbo.pan
  * @date 2020/11/11
@@ -63,5 +67,17 @@ public enum DataType {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    private static Map<String, DataType> enumMap = Maps.newHashMap();
+
+    static {
+        for(DataType as : DataType.values()) {
+            enumMap.put(as.getType(), as);
+        }
+    }
+
+    public static DataType getByType(String type) {
+        return  enumMap.get(type);
     }
 }

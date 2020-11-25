@@ -11,4 +11,12 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(path = "propMapping")
 public interface PropMappingDao extends BaseDao<PropMappingPO> {
 
+    /**
+     * findByObjectIdAndSrcPropId
+     * @param objectId
+     * @param srcPropId
+     * @return
+     */
+    PropMappingPO findByObjectIdAndSrcPropId(Long objectId, Long srcPropId);
+
 }

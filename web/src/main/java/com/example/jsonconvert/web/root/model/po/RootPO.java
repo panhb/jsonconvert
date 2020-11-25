@@ -1,4 +1,4 @@
-package com.example.jsonconvert.web.moduleobject.model.po;
+package com.example.jsonconvert.web.root.model.po;
 
 import com.example.jsonconvert.web.base.model.po.BasePO;
 import lombok.Data;
@@ -12,21 +12,21 @@ import javax.persistence.Entity;
  */
 @ToString(callSuper = true)
 @Data
-@Entity(name = "t_module_object")
-public class ModuleObjectPO extends BasePO {
+@Entity(name = "t_root")
+public class RootPO extends BasePO {
 
     /**
-     * 根id
+     * 属性类型
      */
-    private Long rootId;
+    private String type;
 
     /**
-     * 模块id
+     * 属性对象id
      */
-    private Long moduleId;
+    private Long objectId;
 
     /**
-     * 系统code
+     * 属性数组id
      */
-    private String sysCode;
+    private Long arrayId;
 }
