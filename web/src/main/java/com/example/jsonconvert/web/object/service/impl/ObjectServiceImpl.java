@@ -4,7 +4,6 @@ import com.example.jsonconvert.web.base.service.BaseService;
 import com.example.jsonconvert.web.object.dao.ObjectDao;
 import com.example.jsonconvert.web.object.model.po.ObjectPO;
 import com.example.jsonconvert.web.object.service.ObjectService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

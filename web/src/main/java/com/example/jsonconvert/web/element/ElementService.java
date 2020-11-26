@@ -1,5 +1,7 @@
 package com.example.jsonconvert.web.element;
 
+import com.example.jsonconvert.web.array.model.po.ArrayPO;
+import com.example.jsonconvert.web.array.service.ArrayService;
 import com.example.jsonconvert.web.base.service.BaseService;
 import com.example.jsonconvert.web.objectprop.model.po.ObjectPropPO;
 import com.example.jsonconvert.web.objectprop.service.ObjectPropService;
@@ -43,6 +45,9 @@ public class ElementService extends BaseService {
     @Autowired
     private PropService propService;
 
+    @Autowired
+    private ArrayService arrayService;
+
     public RootElement buildRoot(Long rootId) {
         RootPO po = rootService.findById(rootId);
         RootElement rootElement = new RootElement();
@@ -72,20 +77,33 @@ public class ElementService extends BaseService {
             PropPO targetProp = propPOMap.get(targetPropId);
             Element element = new Element();
             element.setPropName(srcProp.getName());
-//            element.setPropType();
-//            element.setTargetPropName();
-//            element.setTargetPropType();
+            element.setPropType(DataType.getByType(srcProp.getType()));
+            element.setTargetPropName(targetProp.getName());
+            element.setTargetPropType(DataType.getByType(targetProp.getType()));
             element.setNullVerify(propMappingPO.getNullVerify());
             element.setRegularVerify(propMappingPO.getRegularVerify());
             element.setDefaultValue(propMappingPO.getDefaultValue());
-//            element.setArrayElement();
-//            element.setObjectElement();
+            if (DataType.OBJECT.getType().equals(srcProp.getType())) {
+                element.setObjectElement(buildObject(srcProp.getObjectId()));
+            }
+            if (DataType.ARRAY.getType().equals(srcProp.getType())) {
+                element.setArrayElement(buildArray(srcProp.getArrayId()));
+            }
             return element;
         }).collect(toList()));
         return objectElement;
     }
 
     private ArrayElement buildArray(Long arrayId) {
-        return null;
+        ArrayPO arrayPO = arrayService.findById(arrayId);
+        ArrayElement arrayElement = new ArrayElement();
+        arrayElement.setPropType(DataType.getByType(arrayPO.getType()));
+        if (DataType.OBJECT.getType().equals(arrayPO.getType())) {
+            arrayElement.setObjectElement(buildObject(arrayPO.getObjectId()));
+        }
+        if (DataType.ARRAY.getType().equals(arrayPO.getType())) {
+            arrayElement.setArrayElement(buildArray(arrayPO.getArrayId()));
+        }
+        return arrayElement;
     }
 }

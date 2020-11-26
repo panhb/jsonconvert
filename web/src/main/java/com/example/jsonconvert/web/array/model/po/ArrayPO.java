@@ -1,4 +1,4 @@
-package com.example.jsonconvert.web.prop.model.po;
+package com.example.jsonconvert.web.array.model.po;
 
 import com.example.jsonconvert.web.base.model.po.BasePO;
 import lombok.Data;
@@ -12,26 +12,21 @@ import javax.persistence.Entity;
  */
 @ToString(callSuper = true)
 @Data
-@Entity(name = "t_prop")
-public class PropPO extends BasePO {
+@Entity(name = "t_array")
+public class ArrayPO extends BasePO {
 
     /**
-     * 属性名
-     */
-    private String name;
-
-    /**
-     * 属性类型
+     * 类型
      */
     private String type;
 
     /**
-     * 属性对象id
+     * 对象id
      */
     private Long objectId;
 
     /**
-     * 属性数组id
+     * 数组id
      */
     private Long arrayId;
 }

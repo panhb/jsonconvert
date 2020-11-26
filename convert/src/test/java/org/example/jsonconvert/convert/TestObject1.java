@@ -1,6 +1,7 @@
 package org.example.jsonconvert.convert;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import org.example.jsonconvert.JsonConvert;
 import org.example.jsonconvert.enums.DataType;
 import org.example.jsonconvert.model.Element;
@@ -41,7 +42,8 @@ public class TestObject1 {
         root.setPropType(DataType.ARRAY);
 
         try {
-            System.out.println(JsonConvert.convertToString(json, root));
+            System.out.println(new Gson().toJson(root));
+//            System.out.println(JsonConvert.convertToString(json, root));
         } catch (Exception e) {
             e.printStackTrace();
         }

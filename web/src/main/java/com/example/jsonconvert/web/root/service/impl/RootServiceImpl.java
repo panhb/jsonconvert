@@ -21,6 +21,6 @@ public class RootServiceImpl extends BaseService implements RootService {
 
     @Override
     public RootPO findById(Long id) {
-        return dao.getOne(id);
+        return dao.findById(id).get();
     }
 }

@@ -11,11 +11,23 @@
  Target Server Version : 50731
  File Encoding         : 65001
 
- Date: 20/11/2020 10:42:39
+ Date: 26/11/2020 16:39:50
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for t_array
+-- ----------------------------
+DROP TABLE IF EXISTS `t_array`;
+CREATE TABLE `t_array`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `type` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '类型',
+  `object_id` bigint(20) NULL DEFAULT NULL COMMENT '对象id',
+  `array_id` bigint(20) NULL DEFAULT NULL COMMENT '数组id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for t_module_object
@@ -23,7 +35,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `t_module_object`;
 CREATE TABLE `t_module_object`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `object_id` bigint(20) NULL DEFAULT NULL COMMENT '对象id',
+  `root_id` bigint(20) NULL DEFAULT NULL COMMENT '对象id',
   `module_id` bigint(20) NULL DEFAULT NULL COMMENT '模块id',
   `sys_code` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '系统code',
   PRIMARY KEY (`id`) USING BTREE
@@ -60,6 +72,7 @@ CREATE TABLE `t_prop`  (
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '属性名',
   `type` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '属性类型',
   `object_id` bigint(20) NULL DEFAULT NULL COMMENT '属性对象id',
+  `array_id` bigint(20) NULL DEFAULT NULL COMMENT '属性数组id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
@@ -74,7 +87,20 @@ CREATE TABLE `t_prop_mapping`  (
   `null_verify` tinyint(1) NULL DEFAULT NULL COMMENT '源属性值非空校验',
   `regular_verify` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '源属性值正则校验',
   `default_value` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL COMMENT '无源属性时默认值',
+  `object_id` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for t_root
+-- ----------------------------
+DROP TABLE IF EXISTS `t_root`;
+CREATE TABLE `t_root`  (
+  `id` bigint(20) NOT NULL,
+  `type` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `object_id` bigint(20) NULL DEFAULT NULL,
+  `array_id` bigint(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
