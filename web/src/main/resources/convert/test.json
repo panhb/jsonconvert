@@ -1,0 +1,20 @@
+{
+  "propType": "ARRAY",
+  "objectElement": {
+    "elements": [
+      {
+        "propName": "id",
+        "targetPropName": "pkid2",
+        "targetPropType": "LONG",
+        "propType": "STRING"
+      },
+      {
+        "propName": "name",
+        "targetPropName": "testname",
+        "targetPropType": "STRING",
+        "propType": "STRING",
+        "nullVerify": true
+      }
+    ]
+  }
+}

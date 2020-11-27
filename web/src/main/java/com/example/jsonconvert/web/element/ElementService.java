@@ -12,11 +12,11 @@ import com.example.jsonconvert.web.propmapping.service.PropMappingService;
 import com.example.jsonconvert.web.root.model.po.RootPO;
 import com.example.jsonconvert.web.root.service.RootService;
 import com.google.common.collect.Lists;
-import org.example.jsonconvert.enums.DataType;
-import org.example.jsonconvert.model.ArrayElement;
-import org.example.jsonconvert.model.Element;
-import org.example.jsonconvert.model.ObjectElement;
-import org.example.jsonconvert.model.RootElement;
+import com.example.jsonconvert.enums.DataType;
+import com.example.jsonconvert.model.ArrayElement;
+import com.example.jsonconvert.model.Element;
+import com.example.jsonconvert.model.ObjectElement;
+import com.example.jsonconvert.model.RootElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
