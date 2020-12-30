@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
-
 /**
  * @author hongbo.pan
  * @date 2020/11/23
@@ -90,7 +88,7 @@ public class ElementService extends BaseService {
                 element.setArrayElement(buildArray(srcProp.getArrayId()));
             }
             return element;
-        }).collect(toList()));
+        }).collect(Collectors.toList()));
         return objectElement;
     }
 

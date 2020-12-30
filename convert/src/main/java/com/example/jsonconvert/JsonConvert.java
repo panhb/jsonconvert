@@ -205,29 +205,29 @@ public class JsonConvert {
                 throw new JsonConvertException(errMsg.toString());
             }
             switch (element.getTargetPropType()){
-                case DataType.OBJECT:
-                case DataType.ARRAY:
+                case OBJECT:
+                case ARRAY:
                     jsonObject.add(element.getTargetPropName(), jsonElement);
                     break;
-                case DataType.STRING:
+                case STRING:
                     jsonObject.addProperty(element.getTargetPropName(), jsonElement.getAsString());
                     break;
-                case DataType.BOOLEAN:
+                case BOOLEAN:
                     jsonObject.addProperty(element.getTargetPropName(), Boolean.valueOf(jsonElement.getAsString()));
                     break;
-                case DataType.INT:
+                case INT:
                     jsonObject.addProperty(element.getTargetPropName(), Integer.valueOf(jsonElement.getAsString()));
                     break;
-                case DataType.LONG:
+                case LONG:
                     jsonObject.addProperty(element.getTargetPropName(), Long.valueOf(jsonElement.getAsString()));
                     break;
-                case DataType.FLOAT:
+                case FLOAT:
                     jsonObject.addProperty(element.getTargetPropName(), Float.valueOf(jsonElement.getAsString()));
                     break;
-                case DataType.DOUBLE:
+                case DOUBLE:
                     jsonObject.addProperty(element.getTargetPropName(), Double.valueOf(jsonElement.getAsString()));
                     break;
-                case DataType.BIGDECIMAL:
+                case BIGDECIMAL:
                     jsonObject.addProperty(element.getTargetPropName(), new BigDecimal(jsonElement.getAsString()));
                     break;
                 default:
