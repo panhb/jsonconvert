@@ -5,10 +5,11 @@ import com.example.jsonconvert.exception.JsonConvertException;
 import com.example.jsonconvert.model.ArrayElement;
 import com.example.jsonconvert.model.BaseElement;
 import com.example.jsonconvert.model.Element;
+import com.example.jsonconvert.utils.CommonUtil;
 import com.google.common.base.Strings;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
@@ -24,8 +25,6 @@ import java.util.regex.Pattern;
  * @date 2020/11/10
  */
 public class JsonConvert {
-
-    private static final Gson gson = new Gson();
 
     /**
      * 转换成目标json
@@ -52,7 +51,7 @@ public class JsonConvert {
             throw new JsonConvertException("error json");
         }
         JsonElement element = convertToElement(jsonElement, rootElement, dataPropName);
-        return gson.toJson(element);
+        return CommonUtil.toJson(element);
     }
 
     private static JsonElement convertToElement(JsonElement jsonElement, RootElement rootElement, String dataPropName) {
@@ -108,14 +107,7 @@ public class JsonConvert {
             newArrayElement.setPropType(DataType.OBJECT);
             arrayElement.setArrayElement(newArrayElement);
         } else if (jsonElement.isJsonPrimitive()) {
-            JsonPrimitive jsonPrimitive = jsonElement.getAsJsonPrimitive();
-            if (jsonPrimitive.isNumber()) {
-                newArrayElement.setPropType(DataType.BIGDECIMAL);
-            } else if (jsonPrimitive.isBoolean()) {
-                newArrayElement.setPropType(DataType.BOOLEAN);
-            } else {
-                newArrayElement.setPropType(DataType.STRING);
-            }
+            newArrayElement.setPropType(CommonUtil.getDataTypeByJsonPrimitive(jsonElement.getAsJsonPrimitive()));
             arrayElement.setArrayElement(newArrayElement);
         }
         return arrayElement;
@@ -185,6 +177,8 @@ public class JsonConvert {
             JsonElement jsonElement = getValue(element, jsonObject);
             if (Objects.nonNull(jsonElement) && !jsonElement.isJsonNull()) {
                 setValue(element, jsonElement, jsonObj);
+            } else {
+                setValue(element, JsonNull.INSTANCE, jsonObj);
             }
         });
         return jsonObj;
@@ -208,6 +202,9 @@ public class JsonConvert {
                 case OBJECT:
                 case ARRAY:
                     jsonObject.add(element.getTargetPropName(), jsonElement);
+                    break;
+                case NULL:
+                    jsonObject.add(element.getTargetPropName(), JsonNull.INSTANCE);
                     break;
                 case STRING:
                     jsonObject.addProperty(element.getTargetPropName(), jsonElement.getAsString());

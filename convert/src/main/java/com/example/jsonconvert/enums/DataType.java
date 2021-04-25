@@ -53,7 +53,12 @@ public enum DataType {
     /**
      * boolean
      */
-    BOOLEAN("boolean");
+    BOOLEAN("boolean"),
+
+    /**
+     * null
+     */
+    NULL("null");
 
     private String type;
 

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
+
 /**
  * @author hongbo.pan
  * @date 2020/11/26
@@ -21,7 +23,7 @@ class ElementServiceTest {
 
     @SneakyThrows
     @Test
-    void buildRoot() {
+    void buildRoot() throws IOException {
         String json = "{\"id\":\"1\",\"name2\":\"999\"}";
 //        System.out.println(new Gson().toJson(service.buildRoot(1L)));
 //        System.out.println(JsonConvert.convertToString(json, service.buildRoot(1L)));

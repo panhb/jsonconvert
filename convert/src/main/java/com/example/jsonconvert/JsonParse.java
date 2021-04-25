@@ -4,13 +4,13 @@ import com.example.jsonconvert.enums.DataType;
 import com.example.jsonconvert.exception.JsonParseException;
 import com.example.jsonconvert.model.ArrayElement;
 import com.example.jsonconvert.model.Element;
+import com.example.jsonconvert.utils.CommonUtil;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import com.example.jsonconvert.model.ObjectElement;
 import com.example.jsonconvert.model.RootElement;
 
@@ -40,7 +40,7 @@ public class JsonParse {
      */
     public static RootElement parse(JsonElement jsonElement) {
         RootElement rootElement = new RootElement();
-        rootElement.setPropType(getDataType(jsonElement));
+        rootElement.setPropType(CommonUtil.getDataTypeByJsonElement(jsonElement));
         if (jsonElement.isJsonObject()) {
             rootElement.setObjectElement(parseObject(jsonElement));
         } else if (jsonElement.isJsonArray()) {
@@ -105,7 +105,7 @@ public class JsonParse {
             element.setPropName(entry.getKey());
             element.setTargetPropName(entry.getKey());
             JsonElement value = entry.getValue();
-            DataType dataType = getDataType(value);
+            DataType dataType = CommonUtil.getDataTypeByJsonElement(value);
             element.setPropType(dataType);
             element.setTargetPropType(dataType);
             if (value.isJsonArray()) {
@@ -131,35 +131,13 @@ public class JsonParse {
         ArrayElement arrayElement = new ArrayElement();
         JsonArray jsonArray = jsonElement.getAsJsonArray();
         JsonElement element = jsonArray.get(0);
-        arrayElement.setPropType(getDataType(element));
+        arrayElement.setPropType(CommonUtil.getDataTypeByJsonElement(element));
         if (element.isJsonArray()) {
             arrayElement.setArrayElement(parseArray(element));
         } else if (element.isJsonObject()) {
             arrayElement.setObjectElement(parseObject(element));
         }
         return arrayElement;
-    }
-
-    /**
-     * 获取类型
-     * @param jsonElement
-     * @return
-     */
-    private static DataType getDataType(JsonElement jsonElement) {
-        if (jsonElement.isJsonArray()) {
-            return DataType.ARRAY;
-        } else if (jsonElement.isJsonObject()) {
-            return DataType.OBJECT;
-        } else {
-            JsonPrimitive jsonPrimitive = jsonElement.getAsJsonPrimitive();
-            if (jsonPrimitive.isNumber()) {
-                return DataType.BIGDECIMAL;
-            } else if (jsonPrimitive.isBoolean()) {
-                return DataType.BOOLEAN;
-            } else {
-                return DataType.STRING;
-            }
-        }
     }
 
 }
