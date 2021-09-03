@@ -34,12 +34,15 @@ public class Element extends BaseElement {
 
     /**
      * 正则校验源属性值
+     * 先决条件
+     * 1.源数据非空
+     * 2.类型为DataType.STRING
      */
     private String regularVerify;
 
     /**
-     * 在源属性不存在且有目标属性时，使用默认值
-     * 默认值优先级高于非空校验和正则校验
+     * 在源属性不存在时，默认值配置生效
+     * 当默认值配置存在时，非空校验和正则校验无效
      */
     private String defaultValue;
 
