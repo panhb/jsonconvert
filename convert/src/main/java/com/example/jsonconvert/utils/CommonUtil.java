@@ -41,7 +41,7 @@ public class CommonUtil {
     }
 
     /**
-     *
+     * 获取类型
      * @param jsonPrimitive
      * @return
      */

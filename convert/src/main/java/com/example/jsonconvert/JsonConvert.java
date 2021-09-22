@@ -16,17 +16,18 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.example.jsonconvert.model.ObjectElement;
 import com.example.jsonconvert.model.RootElement;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * @author hongbo.pan
  * @date 2020/11/10
  */
+@Slf4j
 public class JsonConvert {
 
     /**
@@ -47,6 +48,7 @@ public class JsonConvert {
      * @return
      */
     public static String convertToString(String json, RootElement rootElement, String dataPropName) {
+        log.debug("待转换json:{},映射关系:{},数据属性:{}", json, CommonUtil.toJson(rootElement), dataPropName);
         JsonElement jsonElement;
         try {
             jsonElement = JsonParser.parseString(json);

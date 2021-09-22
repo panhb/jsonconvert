@@ -1,5 +1,6 @@
 package com.example.jsonconvert;
 
+import cn.hutool.core.util.StrUtil;
 import com.example.jsonconvert.enums.DataType;
 import com.example.jsonconvert.exception.JsonParseException;
 import com.example.jsonconvert.model.ArrayElement;
@@ -13,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.example.jsonconvert.model.ObjectElement;
 import com.example.jsonconvert.model.RootElement;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import java.util.Optional;
  * @author hongbo.pan
  * @date 2020/11/11
  */
+@Slf4j
 public class JsonParse {
 
     /**
@@ -31,24 +34,6 @@ public class JsonParse {
      */
     public static RootElement parse(String json) {
         return parse(json, null);
-    }
-
-    /**
-     * 解析json对象结构
-     * @param jsonElement
-     * @return
-     */
-    public static RootElement parse(JsonElement jsonElement) {
-        RootElement rootElement = new RootElement();
-        rootElement.setPropType(CommonUtil.getDataTypeByJsonElement(jsonElement));
-        if (jsonElement.isJsonObject()) {
-            rootElement.setObjectElement(parseObject(jsonElement));
-        } else if (jsonElement.isJsonArray()) {
-            rootElement.setArrayElement(parseArray(jsonElement));
-        } else {
-            throw new JsonParseException("error type");
-        }
-        return rootElement;
     }
 
     /**
@@ -64,6 +49,7 @@ public class JsonParse {
      * @return
      */
     public static RootElement parse(String json, String dataPropName) {
+        log.debug("待解析json:{},数据属性:{}", json, dataPropName);
         JsonElement jsonElement;
         try {
             jsonElement = JsonParser.parseString(json);
@@ -73,17 +59,40 @@ public class JsonParse {
         RootElement rootElement = parse(jsonElement);
         if (!Strings.isNullOrEmpty(dataPropName)) {
             if (DataType.OBJECT.equals(rootElement.getPropType())) {
-                ObjectElement objectElement = rootElement.getObjectElement();
-                Optional<Element> elementOptional = objectElement.getElements().stream().filter(
-                        e -> dataPropName.equals(e.getPropName())).findFirst();
-                if (elementOptional.isPresent()) {
-                    rootElement.setObjectElement(elementOptional.get().getObjectElement());
-                } else {
-                    throw new JsonParseException("object is not exist");
+                List<String> dataPropNameList = StrUtil.split(dataPropName,".");
+                for (String propName : dataPropNameList) {
+                    ObjectElement objectElement = rootElement.getObjectElement();
+                    Optional<Element> elementOptional = objectElement.getElements().stream().filter(
+                            e -> propName.equals(e.getPropName())).findFirst();
+                    if (elementOptional.isPresent()) {
+                        rootElement.setArrayElement(elementOptional.get().getArrayElement());
+                        rootElement.setObjectElement(elementOptional.get().getObjectElement());
+                        rootElement.setPropType(elementOptional.get().getPropType());
+                    } else {
+                        throw new JsonParseException("object is not exist");
+                    }
                 }
             } else {
                 throw new JsonParseException("datatype is not object");
             }
+        }
+        return rootElement;
+    }
+
+    /**
+     * 解析json对象结构
+     * @param jsonElement
+     * @return
+     */
+    private static RootElement parse(JsonElement jsonElement) {
+        RootElement rootElement = new RootElement();
+        rootElement.setPropType(CommonUtil.getDataTypeByJsonElement(jsonElement));
+        if (jsonElement.isJsonObject()) {
+            rootElement.setObjectElement(parseObject(jsonElement));
+        } else if (jsonElement.isJsonArray()) {
+            rootElement.setArrayElement(parseArray(jsonElement));
+        } else {
+            throw new JsonParseException("error type");
         }
         return rootElement;
     }

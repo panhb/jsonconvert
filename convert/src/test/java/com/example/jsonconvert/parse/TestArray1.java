@@ -25,6 +25,8 @@ public class TestArray1 {
             System.out.println(JsonConvert.convertToString(json2, rootElement));
 
             System.out.println(JsonConvert.convertToString(json2, rootElement, "response.dto.detailList"));
+
+            System.out.println(JsonParse.parse(json2, "response.dto.detailList"));
         } catch (Exception e) {
             e.printStackTrace();
         }
